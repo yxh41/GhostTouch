@@ -45,6 +45,7 @@ TVZPrefs_LDFLAGS += -FFrameworks/SwiftUIIntrospect.xcframework/ios-arm64_arm64e 
 TVZPrefs_SWIFTFLAGS += -FFrameworks/MCEmojiPicker.xcframework/ios-arm64_arm64e -framework MCEmojiPicker
 TVZPrefs_SWIFTFLAGS += -FFrameworks/SwiftUIIntrospect.xcframework/ios-arm64_arm64e -framework SwiftUIIntrospect
 endif
+TVZPrefs_SWIFTFLAGS += -strict-concurrency=minimal
 
 TVZPrefs_FRAMEWORKS += UIKit
 TVZPrefs_PRIVATE_FRAMEWORKS += Preferences
