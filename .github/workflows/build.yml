@@ -1,1 +1,128 @@
-bmFtZTogQnVpbGQgUGFja2FnZQoKb246CiAgd29ya2Zsb3dfZGlzcGF0Y2g6CiAgcHVzaDoKICAgIGJyYW5jaGVzOgogICAgICAtIG1haW4KICAgIHRhZ3M6CiAgICAgIC0gJ3YqJwoKcGVybWlzc2lvbnM6CiAgY29udGVudHM6IHdyaXRlCgplbnY6CiAgVkVSU0lPTjogMS4wCiAgRklOQUxQQUNLQUdFOiAxCiAgSE9NRUJSRVdfTk9fQVVUT19VUERBVEU6IDEKICBIT01FQlJFV19OT19JTlNUQUxMRURfREVQRU5ERU5UU19DSEVDSzogMQogIFRIRU9TOiAke3sgZ2l0aHViLndvcmtzcGFjZSB9fS90aGVvcy1yb290aGlkZQoKam9iczoKICBidWlsZDoKICAgIG5hbWU6IEJ1aWxkICgke3sgbWF0cml4LmJ1aWxkX3ZhcmlhbnQgfX0pCiAgICBydW5zLW9uOiBtYWNvcy0xNAogICAgc3RyYXRlZ3k6CiAgICAgIGZhaWwtZmFzdDogZmFsc2UKICAgICAgbWF0cml4OgogICAgICAgIGluY2x1ZGU6CiAgICAgICAgICAtIGJ1aWxkX3ZhcmlhbnQ6IGxlZ2FjeQogICAgICAgICAgICBlbnZfc2NyaXB0OiBkZXZraXQvZW52LnNoCiAgICAgICAgICAtIGJ1aWxkX3ZhcmlhbnQ6IHJvb3RsZXNzCiAgICAgICAgICAgIGVudl9zY3JpcHQ6IGRldmtpdC9yb290bGVzcy5zaAogICAgICAgICAgLSBidWlsZF92YXJpYW50OiByb290aGlkZQogICAgICAgICAgICBlbnZfc2NyaXB0OiBkZXZraXQvcm9vdGhpZGUuc2gKCiAgICBzdGVwczoKICAgIC0gbmFtZTogU2V0dXAgWGNvZGUKICAgICAgdXNlczogbWF4aW0tbG9iYW5vdi9zZXR1cC14Y29kZUB2MQogICAgICB3aXRoOgogICAgICAgIHhjb2RlLXZlcnNpb246ICcxNS40JwoKICAgIC0gbmFtZTogQ2hlY2tvdXQKICAgICAgdXNlczogYWN0aW9ucy9jaGVja291dEB2NAoKICAgIC0gbmFtZTogU2V0dXAgRW52aXJvbm1lbnQKICAgICAgcnVuOiB8CiAgICAgICAgZWNobyAiJFRIRU9TL2JpbiIgPj4gIiRHSVRIVUJfUEFUSCIKICAgICAgICBlY2hvICJUSEVPUz0kVEhFT1MiID4+ICIkR0lUSFVCX0VOViIKICAgICAgICBlY2hvICJUSEVPU19JR05PUkVfUEFSQUxMRUxfQlVJTERJTkdfTk9USUNFPXllcyIgPj4gIiRIT01FLy50aGVvc3JjIgoKICAgIC0gbmFtZTogSW5zdGFsbCBUaGVvcyBkZXBlbmRlbmNpZXMKICAgICAgcnVuOiB8CiAgICAgICAgYnJldyBpbnN0YWxsIGxkaWQgeHoKICAgICAgICBlY2hvICIkKGJyZXcgLS1wcmVmaXgpL2JpbiIgPj4gIiRHSVRIVUJfUEFUSCIKICAgICAgICBjb21tYW5kIC12IGxkaWQKICAgICAgICBjb21tYW5kIC12IHh6CgogICAgLSBuYW1lOiBDaGVja291dCBUaGVvcyAoUm9vdEhpZGUpCiAgICAgIHVzZXM6IGFjdGlvbnMvY2hlY2tvdXRAdjQKICAgICAgd2l0aDoKICAgICAgICByZXBvc2l0b3J5OiByb290aGlkZS90aGVvcwogICAgICAgIHJlZjogZDQ4MjZmNGU1NDEyN2NmZTFkZTg4MTAzYjY5YjkyMTA3NTkxYzA1YgogICAgICAgIHBhdGg6IHRoZW9zLXJvb3RoaWRlCiAgICAgICAgc3VibW9kdWxlczogcmVjdXJzaXZlCgogICAgLSBuYW1lOiBJbnN0YWxsIGlPUyBTREsKICAgICAgcnVuOiB8CiAgICAgICAgY2QgIiRUSEVPUyIKICAgICAgICAuL2Jpbi9pbnN0YWxsLXNkayBpUGhvbmVPUzE2LjUKICAgICAgZW52OgogICAgICAgIEdJVEhVQl9UT0tFTjogJHt7IHNlY3JldHMuR0lUSFVCX1RPS0VOIH19CgogICAgLSBuYW1lOiBCdWlsZCBQYWNrYWdlCiAgICAgIHJ1bjogfAogICAgICAgIHNvdXJjZSAiJHt7IG1hdHJpeC5lbnZfc2NyaXB0IH19IgogICAgICAgIGV4cG9ydCBUSEVPUz0iJEdJVEhVQl9XT1JLU1BBQ0UvdGhlb3Mtcm9vdGhpZGUiCiAgICAgICAgbWFrZSBjbGVhbiBwYWNrYWdlCgogICAgLSBuYW1lOiBDb2xsZWN0IGRTWU1zCiAgICAgIHJ1bjogfAogICAgICAgIGZpbmQgLnRoZW9zL29iaiAtbmFtZSAiKi5kU1lNIiAtZXhlYyBjcCAtciB7fSAuL3BhY2thZ2VzLyBcOwoKICAgIC0gbmFtZTogVXBsb2FkIGRTWU1zCiAgICAgIHVzZXM6IGFjdGlvbnMvdXBsb2FkLWFydGlmYWN0QHY0CiAgICAgIHdpdGg6CiAgICAgICAgbmFtZTogc3ltYm9scy0ke3sgbWF0cml4LmJ1aWxkX3ZhcmlhbnQgfX0KICAgICAgICBwYXRoOiB8CiAgICAgICAgICAuL3BhY2thZ2VzLyouZFNZTQogICAgICAgIGlmLW5vLWZpbGVzLWZvdW5kOiB3YXJuCgogICAgLSBuYW1lOiBVcGxvYWQgUGFja2FnZXMKICAgICAgdXNlczogYWN0aW9ucy91cGxvYWQtYXJ0aWZhY3RAdjQKICAgICAgd2l0aDoKICAgICAgICBuYW1lOiBwYWNrYWdlcy0ke3sgbWF0cml4LmJ1aWxkX3ZhcmlhbnQgfX0KICAgICAgICBwYXRoOiB8CiAgICAgICAgICAuL3BhY2thZ2VzLyouZGViCiAgICAgICAgaWYtbm8tZmlsZXMtZm91bmQ6IGVycm9yCgogIHJlbGVhc2U6CiAgICBuYW1lOiBSZWxlYXNlCiAgICBuZWVkczogYnVpbGQKICAgIGlmOiBzdGFydHNXaXRoKGdpdGh1Yi5yZWYsICdyZWZzL3RhZ3MvdicpCiAgICBydW5zLW9uOiB1YnVudHUtbGF0ZXN0CgogICAgc3RlcHM6CiAgICAtIG5hbWU6IENoZWNrb3V0CiAgICAgIHVzZXM6IGFjdGlvbnMvY2hlY2tvdXRAdjQKCiAgICAtIG5hbWU6IEV4dHJhY3QgVmVyc2lvbgogICAgICBydW46IHwKICAgICAgICBWRVJTSU9OPSQoYXdrICcvXmV4cG9ydFtbOnNwYWNlOl1dK1BBQ0tBR0VfVkVSU0lPTltbOnNwYWNlOl1dKjo9LyB7IHByaW50ICQ0OyBleGl0IH0nIE1ha2VmaWxlKQogICAgICAgIGVjaG8gIlZFUlNJT049JFZFUlNJT04iID4+ICIkR0lUSFVCX0VOViIKCiAgICAtIG5hbWU6IERvd25sb2FkIFBhY2thZ2VzCiAgICAgIHVzZXM6IGFjdGlvbnMvZG93bmxvYWQtYXJ0aWZhY3RAdjQKICAgICAgd2l0aDoKICAgICAgICBwYXR0ZXJuOiBwYWNrYWdlcy0qCiAgICAgICAgcGF0aDogcmVsZWFzZS1wYWNrYWdlcwogICAgICAgIG1lcmdlLW11bHRpcGxlOiB0cnVlCgogICAgLSBuYW1lOiBSZWxlYXNlCiAgICAgIHVzZXM6IHNvZnRwcm9wcy9hY3Rpb24tZ2gtcmVsZWFzZUB2MgogICAgICB3aXRoOgogICAgICAgIHRhZ19uYW1lOiB2JHt7IGVudi5WRVJTSU9OIH19CiAgICAgICAgZHJhZnQ6IGZhbHNlCiAgICAgICAgcHJlcmVsZWFzZTogZmFsc2UKICAgICAgICBmaWxlczogfAogICAgICAgICAgcmVsZWFzZS1wYWNrYWdlcy8qLmRlYgo=
+name: Build Package
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+    tags:
+      - 'v*'
+
+permissions:
+  contents: write
+
+env:
+  VERSION: 1.0
+  FINALPACKAGE: 1
+  HOMEBREW_NO_AUTO_UPDATE: 1
+  HOMEBREW_NO_INSTALLED_DEPENDENTS_CHECK: 1
+  THEOS: ${{ github.workspace }}/theos-roothide
+
+jobs:
+  build:
+    name: Build (${{ matrix.build_variant }})
+    runs-on: macos-14
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - build_variant: legacy
+            env_script: devkit/env.sh
+          - build_variant: rootless
+            env_script: devkit/rootless.sh
+          - build_variant: roothide
+            env_script: devkit/roothide.sh
+
+    steps:
+    - name: Setup Xcode
+      uses: maxim-lobanov/setup-xcode@v1
+      with:
+        xcode-version: '15.4'
+
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Setup Environment
+      run: |
+        echo "$THEOS/bin" >> "$GITHUB_PATH"
+        echo "THEOS=$THEOS" >> "$GITHUB_ENV"
+        echo "THEOS_IGNORE_PARALLEL_BUILDING_NOTICE=yes" >> "$HOME/.theosrc"
+
+    - name: Install Theos dependencies
+      run: |
+        brew install ldid xz
+        echo "$(brew --prefix)/bin" >> "$GITHUB_PATH"
+        command -v ldid
+        command -v xz
+
+    - name: Checkout Theos (RootHide)
+      uses: actions/checkout@v4
+      with:
+        repository: roothide/theos
+        ref: d4826f4e54127cfe1de88103b69b92107591c05b
+        path: theos-roothide
+        submodules: recursive
+
+    - name: Install iOS SDK
+      run: |
+        cd "$THEOS"
+        ./bin/install-sdk iPhoneOS16.5
+      env:
+        GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+    - name: Build Package
+      run: |
+        source "${{ matrix.env_script }}"
+        export THEOS="$GITHUB_WORKSPACE/theos-roothide"
+        make clean package
+
+    - name: Collect dSYMs
+      run: |
+        find .theos/obj -name "*.dSYM" -exec cp -r {} ./packages/ \;
+
+    - name: Upload dSYMs
+      uses: actions/upload-artifact@v4
+      with:
+        name: symbols-${{ matrix.build_variant }}
+        path: |
+          ./packages/*.dSYM
+        if-no-files-found: warn
+
+    - name: Upload Packages
+      uses: actions/upload-artifact@v4
+      with:
+        name: packages-${{ matrix.build_variant }}
+        path: |
+          ./packages/*.deb
+        if-no-files-found: error
+
+  release:
+    name: Release
+    needs: build
+    if: startsWith(github.ref, 'refs/tags/v')
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+
+    - name: Extract Version
+      run: |
+        VERSION=$(awk '/^export[[:space:]]+PACKAGE_VERSION[[:space:]]*:=/ { print $4; exit }' Makefile)
+        echo "VERSION=$VERSION" >> "$GITHUB_ENV"
+
+    - name: Download Packages
+      uses: actions/download-artifact@v4
+      with:
+        pattern: packages-*
+        path: release-packages
+        merge-multiple: true
+
+    - name: Release
+      uses: softprops/action-gh-release@v2
+      with:
+        tag_name: v${{ env.VERSION }}
+        draft: false
+        prerelease: false
+        files: |
+          release-packages/*.deb
