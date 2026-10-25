@@ -96,11 +96,7 @@ __attribute__((visibility("hidden")))
         rv.backgroundColor = [UIColor.greenColor colorWithAlphaComponent:0.0];
         rv.hidden = YES;
         rv.userInteractionEnabled = NO;
-        if (@available(iOS 16.0, *)) {
-            rv.frame = UIScreen.main.bounds;
-        } else {
-            rv.frame = UIScreen.mainScreen.bounds;
-        }
+        rv.frame = UIScreen.mainScreen.bounds;
         rv.windowScene = self;
 
         objc_setAssociatedObject(self, LNTouchVisualizerWindowKey, rv, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
