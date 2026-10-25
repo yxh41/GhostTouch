@@ -51,7 +51,6 @@ GhostTouch_CCFLAGS += -Wno-unused-variable
 GhostTouch_CCFLAGS += -Wno-unused-function
 
 GhostTouch_LDFLAGS += -F$(FWK_DIR)
-GhostTouch_SWIFTFLAGS += -strict-concurrency=minimal
 
 ifeq ($(THEOS_DEVICE_SIMULATOR),1)
 GhostTouch_LDFLAGS += -rpath /opt/simject

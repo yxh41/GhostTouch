@@ -594,6 +594,7 @@ struct TVZRootView: View {
         )
     }
 
+    @MainActor
     var mainBody: some View {
         Form {
             header
