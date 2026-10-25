@@ -4,7 +4,7 @@ ifeq ($(THEOS_DEVICE_SIMULATOR),1)
 ARCHS := arm64 x86_64
 TARGET := simulator:clang:latest:15.0
 FWK_DIR := Frameworks/_Simulator
-IPHONE_SIMULATOR_ROOT := $(shell devkit/sim-root.sh)
+IPHONE_SIMULATOR_ROOT := $(shell bash devkit/sim-root.sh)
 else
 ARCHS := arm64 arm64e
 TARGET := iphone:clang:latest:15.0
@@ -67,8 +67,8 @@ include $(THEOS_MAKE_PATH)/tweak.mk
 
 export DEBUG
 before-all::
-	devkit/standardize-entitlements.sh
+	bash devkit/standardize-entitlements.sh
 
 export THEOS_OBJ_DIR
 after-all::
-	@devkit/sim-install.sh
+	@bash devkit/sim-install.sh
