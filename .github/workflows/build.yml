@@ -42,6 +42,14 @@ jobs:
     - name: Checkout
       uses: actions/checkout@v4
 
+    - name: Cache Theos
+      id: cache-theos
+      uses: actions/cache@v4
+      with:
+        path: ${{ github.workspace }}/theos-roothide
+        key: theos-roothide-d4826f4e54127cfe1de88103b69b92107591c05b
+        restore-keys: |
+          theos-roothide-
     - name: Setup Environment
       run: |
         echo "$THEOS/bin" >> "$GITHUB_PATH"
@@ -56,6 +64,7 @@ jobs:
         command -v xz
 
     - name: Checkout Theos (RootHide)
+      if: steps.cache-theos.outputs.cache-hit != 'true'
       uses: actions/checkout@v4
       with:
         repository: roothide/theos
@@ -65,8 +74,10 @@ jobs:
 
     - name: Install iOS SDK
       run: |
-        cd "$THEOS"
-        ./bin/install-sdk iPhoneOS16.5
+        if [ ! -d "$THEOS/sdks/iPhoneOS16.5.sdk" ]; then
+          cd "$THEOS"
+          ./bin/install-sdk iPhoneOS16.5
+        fi
       env:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
 

@@ -19,10 +19,6 @@
 static const NSTimeInterval TOUCH_VISUALIZER_ZERO_DELAY = 0.0;
 static const NSTimeInterval TOUCH_VISUALIZER_WINDOW_REMOVE_DELAY = 6.0;
 
-@interface UIWindow (Private)
-- (UIInterfaceOrientation)_windowInterfaceOrientation;
-@end
-
 @interface FBSOrientationUpdate : NSObject
 - (unsigned long long)sequenceNumber;
 - (UIInterfaceOrientation)orientation;
@@ -50,6 +46,7 @@ __attribute__((visibility("hidden")))
     FBSOrientationObserver *_orientationObserver;
     unsigned long long _globalSequenceNumber;
     UIInterfaceOrientation _globalInterfaceOrientation;
+    UIInterfaceOrientation _cachedWindowOrientation;
 }
 
 - (instancetype)initWithFrame:(CGRect)frame {
@@ -170,7 +167,7 @@ __attribute__((visibility("hidden")))
 #pragma mark - UIWindow overrides
 
 - (CGPoint)locationOfTouch:(UITouch *)touch {
-    UIInterfaceOrientation o = [self _windowInterfaceOrientation];
+    UIInterfaceOrientation o = self->_cachedWindowOrientation;
     UIWindow *overlayWindow = self.overlayWindow;
     CGRect fixedSpace = overlayWindow.screen.fixedCoordinateSpace.bounds;
     CGFloat fixedWidth = CGRectGetWidth(fixedSpace);
@@ -200,7 +197,7 @@ __attribute__((visibility("hidden")))
 
 - (CGAffineTransform)coordinateTransform {
     CGAffineTransform affineTransform = CGAffineTransformIdentity;
-    UIInterfaceOrientation windowOrientation = [self _windowInterfaceOrientation];
+    UIInterfaceOrientation windowOrientation = self->_cachedWindowOrientation;
     switch (windowOrientation) {
     case UIInterfaceOrientationPortrait:
         break;
@@ -246,6 +243,8 @@ __attribute__((visibility("hidden")))
     if (!self.touchVisualizationEnabled) {
         return;
     }
+
+    self->_cachedWindowOrientation = self.windowScene ? self.windowScene.interfaceOrientation : UIInterfaceOrientationPortrait;
 
     self.allTouches = event.allTouches;
 
