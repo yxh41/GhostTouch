@@ -15,6 +15,7 @@
 #import <LNTouchVisualizer/LNTouchVisualizerWindow.h>
 
 #import "GhostTouch-Swift.h"
+#import <objc/runtime.h>
 
 static const NSTimeInterval TOUCH_VISUALIZER_ZERO_DELAY = 0.0;
 static const NSTimeInterval TOUCH_VISUALIZER_WINDOW_REMOVE_DELAY = 6.0;
@@ -33,7 +34,6 @@ __attribute__((visibility("hidden")))
 @interface LNTouchVisualizerWindow ()
 
 @property(nonatomic, strong) UIWindow *overlayWindow;
-@property(nonatomic, assign) BOOL fingerTipRemovalScheduled;
 @property(nonatomic, strong) NSTimer *timer;
 @property(nonatomic, strong) NSSet *allTouches;
 
@@ -47,7 +47,16 @@ __attribute__((visibility("hidden")))
     unsigned long long _globalSequenceNumber;
     UIInterfaceOrientation _globalInterfaceOrientation;
     UIInterfaceOrientation _cachedWindowOrientation;
+    NSMutableDictionary *_touchViews;
+    NSMutableDictionary *_removalTimers;
 }
+
+static NSNumber *TVZTouchKey(UITouch *touch) {
+    return @((uintptr_t)(__bridge void *)touch);
+}
+
+static const void *kTVZTouchKey = &kTVZTouchKey;
+static const void *kTVZMorphTimerKey = &kTVZMorphTimerKey;
 
 - (instancetype)initWithFrame:(CGRect)frame {
     return [self initWithFrame:frame
@@ -75,6 +84,8 @@ __attribute__((visibility("hidden")))
         _touchContactConfig = contactConfig ?: [LNTouchConfig touchConfig];
         _touchRippleConfig = rippleConfig ?: [LNTouchConfig rippleConfig];
         _orientationObserver = [[FBSOrientationObserver alloc] init];
+        _touchViews = [NSMutableDictionary dictionary];
+        _removalTimers = [NSMutableDictionary dictionary];
 
         __weak typeof(self) weakSelf = self;
         [_orientationObserver setHandler:^(FBSOrientationUpdate *orientationUpdate) {
@@ -265,7 +276,7 @@ __attribute__((visibility("hidden")))
         }
 
         CGPoint newCenter = [self locationOfTouch:touch];
-        LNTouchImageView *touchView = (LNTouchImageView *)[self.overlayWindow viewWithTag:touch.hash];
+        LNTouchImageView *touchView = [self _touchViewForTouch:touch];
 
         CGAffineTransform newTransform;
         if (self.touchContactConfig.shouldAutoRotate && touchView != nil) {
@@ -307,15 +318,13 @@ __attribute__((visibility("hidden")))
                                 toCenter:newCenter
                            withTransform:newTransform
                               coordinate:coordinateTransform];
-            [self _removeFingerTipWithHash:touch.hash animated:YES];
+            [self _removeFingerTipForTouch:touch animated:YES];
             break;
         }
         default:
             break;
         }
     }
-
-    [self _scheduleFingerTipRemoval];
 }
 
 - (void)_handleTouchMoved:(UITouch *)touch
@@ -358,7 +367,12 @@ __attribute__((visibility("hidden")))
     touchView.transform = newTransform;
 
     if (touch.phase != UITouchPhaseStationary && touchView != nil && touchView.isFadingOut) {
-        [self.timer invalidate];
+        [self _invalidateMorphTimerForView:touchView];
+        NSTimer *pendingRemoval = _removalTimers[TVZTouchKey(touch)];
+        if (pendingRemoval != nil) {
+            [pendingRemoval invalidate];
+            [_removalTimers removeObjectForKey:TVZTouchKey(touch)];
+        }
         [touchView removeFromSuperview];
         touchView = nil;
     }
@@ -367,24 +381,35 @@ __attribute__((visibility("hidden")))
         touchView = [[LNTouchImageView alloc] initWithImage:self.touchImage];
         touchView.transform = coordinateTransform;
         [self.overlayWindow addSubview:touchView];
+        [self _setTouchView:touchView forTouch:touch];
+        objc_setAssociatedObject(touchView, kTVZTouchKey, TVZTouchKey(touch), OBJC_ASSOCIATION_RETAIN_NONATOMIC);
 
         if (self.morphEnabled) {
-            if (self.timer) {
-                [self.timer invalidate];
-            }
+            NSTimer *morphTimer = [NSTimer scheduledTimerWithTimeInterval:self.touchContactConfig.morphDelay
+                                                                  target:self
+                                                                selector:@selector(performMorphWithTouchView:)
+                                                                userInfo:touchView
+                                                                 repeats:YES];
+            self.timer = morphTimer;
+            objc_setAssociatedObject(touchView, kTVZMorphTimerKey, morphTimer, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+        }
 
-            self.timer = [NSTimer scheduledTimerWithTimeInterval:self.touchContactConfig.morphDelay
-                                                            target:self
-                                                        selector:@selector(performMorphWithTouchView:)
-                                                        userInfo:touchView
-                                                            repeats:YES];
+        BOOL shouldAutoRemove = [self shouldAutomaticallyRemoveFingerTipForTouch:touch];
+        if (shouldAutoRemove) {
+            NSTimeInterval removeAt = touch.timestamp + TOUCH_VISUALIZER_WINDOW_REMOVE_DELAY;
+            NSTimeInterval delay = MAX(0.0, removeAt - NSProcessInfo.processInfo.systemUptime);
+            NSTimer *removalTimer = [NSTimer scheduledTimerWithTimeInterval:delay
+                                                                     target:self
+                                                                   selector:@selector(_scheduledRemovalForTouch:)
+                                                                   userInfo:touch
+                                                                    repeats:NO];
+            _removalTimers[TVZTouchKey(touch)] = removalTimer;
         }
     }
 
     if (!touchView.isFadingOut) {
         touchView.alpha = self.touchContactConfig.alpha;
         touchView.center = newCenter;
-        touchView.tag = touch.hash;
         touchView.timestamp = touch.timestamp;
         touchView.shouldAutomaticallyRemoveAfterTimeout =
             [self shouldAutomaticallyRemoveFingerTipForTouch:touch];
@@ -410,41 +435,47 @@ __attribute__((visibility("hidden")))
 
 #pragma mark - Private
 
-- (void)_scheduleFingerTipRemoval {
-    if (self.fingerTipRemovalScheduled == YES) {
-        return;
-    }
-
-    self.fingerTipRemovalScheduled = YES;
-    [self performSelector:@selector(removeInactiveFingerTips) withObject:nil afterDelay:0.1];
+- (LNTouchImageView *)_touchViewForTouch:(UITouch *)touch {
+    return (LNTouchImageView *)_touchViews[TVZTouchKey(touch)];
 }
 
-- (void)removeInactiveFingerTips {
-    self.fingerTipRemovalScheduled = NO;
-
-    NSTimeInterval now = NSProcessInfo.processInfo.systemUptime;
-
-    for (LNTouchImageView *touchView in self.overlayWindow.subviews) {
-        if ([touchView isKindOfClass:LNTouchImageView.class] == NO) {
-            continue;
-        }
-
-        if (touchView.shouldAutomaticallyRemoveAfterTimeout &&
-            now > touchView.timestamp + TOUCH_VISUALIZER_WINDOW_REMOVE_DELAY) {
-            [self _removeFingerTipWithHash:touchView.tag animated:YES];
-        }
-    }
-
-    if (self.overlayWindow.subviews.count > 0) {
-        [self _scheduleFingerTipRemoval];
+- (void)_setTouchView:(LNTouchImageView *)view forTouch:(UITouch *)touch {
+    if (view != nil) {
+        _touchViews[TVZTouchKey(touch)] = view;
     }
 }
 
-- (void)_removeFingerTipWithHash:(NSUInteger)hash animated:(BOOL)animated {
-    LNTouchImageView *touchView = (LNTouchImageView *)[self.overlayWindow viewWithTag:hash];
+- (void)_invalidateMorphTimerForView:(LNTouchImageView *)view {
+    NSTimer *morphTimer = objc_getAssociatedObject(view, kTVZMorphTimerKey);
+    if (morphTimer != nil) {
+        [morphTimer invalidate];
+        objc_setAssociatedObject(view, kTVZMorphTimerKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    }
+}
+
+- (void)_scheduledRemovalForTouch:(NSTimer *)timer {
+    UITouch *touch = timer.userInfo;
+    [_removalTimers removeObjectForKey:TVZTouchKey(touch)];
+    [self _removeFingerTipForTouch:touch animated:YES];
+}
+
+- (void)_removeFingerTipForTouch:(UITouch *)touch animated:(BOOL)animated {
+    [self _removeFingerTipForTouchKey:TVZTouchKey(touch) animated:animated];
+}
+
+- (void)_removeFingerTipForTouchKey:(NSNumber *)key animated:(BOOL)animated {
+    LNTouchImageView *touchView = (LNTouchImageView *)_touchViews[key];
     if (touchView == nil || touchView.isFadingOut) {
         return;
     }
+
+    NSTimer *removalTimer = _removalTimers[key];
+    if (removalTimer != nil) {
+        [removalTimer invalidate];
+        [_removalTimers removeObjectForKey:key];
+    }
+
+    [self _invalidateMorphTimerForView:touchView];
 
     BOOL animationsWereEnabled = [UIView areAnimationsEnabled];
 
@@ -463,6 +494,8 @@ __attribute__((visibility("hidden")))
     }
 
     touchView.fadingOut = YES;
+    objc_setAssociatedObject(touchView, kTVZTouchKey, nil, OBJC_ASSOCIATION_RETAIN_NONATOMIC);
+    [_touchViews removeObjectForKey:key];
     [touchView performSelector:@selector(removeFromSuperview)
                     withObject:nil
                     afterDelay:self.touchContactConfig.fadeDuration];
@@ -511,9 +544,13 @@ __attribute__((visibility("hidden")))
                             touchView.transform = CGAffineTransformScale(transform, 1, 1);
                           }
                           completion:^(BOOL finished) {
-                            // If there are no touches, remove this morping touch
+                            // If there are no touches, remove this morphing touch through the
+                            // same path so timers and bookkeeping stay consistent.
                             if (self.allTouches.count == 0) {
-                                [touchView removeFromSuperview];
+                                NSNumber *key = objc_getAssociatedObject(touchView, kTVZTouchKey);
+                                if (key != nil) {
+                                    [self _removeFingerTipForTouchKey:key animated:YES];
+                                }
                             }
                           }];
                     }];
