@@ -26,10 +26,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - build_variant: legacy
-            env_script: devkit/env.sh
-          - build_variant: rootless
-            env_script: devkit/rootless.sh
           - build_variant: roothide
             env_script: devkit/roothide.sh
 
